@@ -88,6 +88,33 @@ A good sync cadence:
 
 Avoid copying raw operational noise into Obsidian. If everything is mirrored, the vault becomes another log pile.
 
+## Live sync pattern
+
+A conservative Planka/Hermes → Obsidian bridge should run as a deterministic no-agent job:
+
+```text
+Planka comments/status changes
+→ filter high-level events
+→ refresh project snapshot
+→ append final/blocker/decision entries
+→ stay silent when nothing changed
+```
+
+Implementation convention used in the Supersocks stack:
+
+```text
+planka_elysia_project_sync.py
+```
+
+The script should write only compact project memory:
+
+- live counts by project/list;
+- completed or blocked cards;
+- review handoffs;
+- comments with evidence, decisions, verification, commit/deploy notes, or durable blockers.
+
+It should not copy every worker heartbeat into Obsidian.
+
 ## Public-system takeaway
 
 A strong human/agent operating system has three layers:
