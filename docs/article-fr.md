@@ -89,6 +89,10 @@ Hermes peut :
 
 Le board reste visible et manipulable par les humains. Hermes agit en arrière-plan comme couche d’automatisation et d’orchestration.
 
+Point important : l’humain n’a pas forcément à vivre dans Planka. Dans un usage réel, l’entrée naturelle peut rester Telegram, Discord ou Slack. Le bon système transforme cette conversation en état opérationnel : message humain → carte Planka → tâche Hermes Kanban → worker → vérification → commentaire Planka → notification retour.
+
+Planka n’est donc pas forcément l’interface principale de commande. C’est la source de vérité visible.
+
 C’est ce qui distingue cette approche d’un simple “agent dans Slack”.
 
 ## Les colonnes comme protocole opérationnel
@@ -347,6 +351,8 @@ Le troisième : les agents doivent bloquer vite. Un agent qui tourne en rond pen
 Le quatrième : la vérification doit être séparée de l’exécution. Un worker peut dire “j’ai corrigé”. Hermes doit vérifier.
 
 Le cinquième : les humains doivent pouvoir reprendre à tout moment. Si le board n’est compréhensible que par l’agent qui l’a rempli, le système a échoué.
+
+Le sixième : il faut séparer l’opérationnel du high level. Planka garde l’état vivant : cartes, blocages, preuves, validations. Obsidian ou une base de connaissance garde la mémoire projet : décisions, direction, recaps, architecture, enseignements. Tout ne doit pas être recopié partout.
 
 ## Vers un gestionnaire de todo vraiment mixte
 

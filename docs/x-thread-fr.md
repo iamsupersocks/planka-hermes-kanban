@@ -14,7 +14,7 @@ C’est ce qu’on explore avec Planka + Hermes Kanban : un kanban open-source q
 - les tâches longues n’ont pas d’état visible ;
 - les handoffs humain ↔ IA sont flous.
 
-Le chat est un bon input. Pas un système de coordination.
+Le chat est un bon input et un bon cockpit. Pas un système de coordination.
 
 3/ Dans notre setup, Planka devient la couche d’état.
 
@@ -89,13 +89,19 @@ Un bon agent ne force pas quand il manque un credential, une décision produit o
 
 Il déplace la carte en Blocked avec une raison actionnable.
 
-12/ Je pense que le futur de la todo list n’est pas “une todo app avec un bouton Ask AI”.
+12/ La couche long terme, ce n’est pas le board.
+
+Planka garde l’état opérationnel : cartes, blocages, preuves, review.
+
+Obsidian ou une base de connaissance garde le high level : décisions, roadmap, recaps, architecture, enseignements.
+
+13/ Je pense que le futur de la todo list n’est pas “une todo app avec un bouton Ask AI”.
 
 C’est un espace de travail où humains et agents partagent le même état opérationnel.
 
 Les cartes deviennent des contrats exécutables.
 
-13/ Repo public avec l’analyse et le draft long :
+14/ Repo public avec l’analyse et le draft long :
 
 https://github.com/iamsupersocks/planka-hermes-kanban
 
@@ -105,7 +111,7 @@ Les agents IA n’ont pas besoin d’un énième chat.
 
 Ils ont besoin d’un état de travail partagé avec les humains.
 
-On expérimente Planka + Hermes Kanban : Planka sert de source de vérité humaine, Hermes orchestre derrière, et les workers GPT-5.5/Grok 4.5/Composer 2.5 exécutent des cartes comme des contrats de travail.
+On expérimente Planka + Hermes Kanban : le chat reste le cockpit humain, Planka sert de source de vérité opérationnelle, Hermes orchestre derrière, et les workers GPT-5.5/Grok 4.5/Composer 2.5 exécutent des cartes comme des contrats de travail.
 
 Une carte contient : contexte, contraintes, critères d’acceptation, permissions, logs, blockers, preuves de vérification.
 

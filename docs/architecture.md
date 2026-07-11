@@ -66,15 +66,18 @@ Humans decide:
 ## Event flow
 
 ```text
-1. Human creates or updates a Planka card
-2. Card enters an agent-ready list
-3. Hermes reads the card
-4. Hermes validates scope and permissions
-5. Hermes chooses a worker or decomposes into sub-cards
-6. Worker executes under constraints
-7. Hermes reviews output and runs verification
-8. Card moves to Human Review, Blocked, or Done
-9. Comments preserve the operational trace
+1. Human asks or approves from the chat cockpit
+2. Intake layer resolves the right project and Planka card
+3. Card enters an agent-ready list
+4. Hermes reads the card
+5. Hermes validates scope and permissions
+6. Hermes chooses a worker or decomposes into sub-cards
+7. Worker executes under constraints
+8. Hermes reviews output and runs verification
+9. Card moves to Human Review, Blocked, or Done
+10. Comments preserve the operational trace
+11. Chat receives the useful notification
+12. Obsidian receives high-level recaps and decisions
 ```
 
 ## Board as protocol
@@ -139,6 +142,21 @@ A card is not complete because an agent says it is complete. It is complete when
 - deployment URL;
 - known risks;
 - residual work.
+
+## High-level project memory
+
+The board should not be the only memory layer.
+
+Use Obsidian or a similar knowledge base for:
+
+- project overview;
+- strategic direction;
+- roadmap themes;
+- durable decisions;
+- weekly/monthly recaps;
+- lessons learned.
+
+This keeps Planka operational and prevents long-term project knowledge from being buried in card comments. The sync should be selective: final summaries, decisions, major blockers, and roadmap changes, not every heartbeat.
 
 ## Why this matters
 

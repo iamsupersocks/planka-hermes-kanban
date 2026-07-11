@@ -84,3 +84,17 @@ Needs Verification
 ## Operational rule
 
 If a card cannot be resumed by a different human or agent from the visible card state, the workflow is not sufficiently documented.
+
+## Chat-first intake
+
+Humans should be able to start from chat. The system should then resolve or create the Planka card behind the scenes.
+
+```text
+human chat message → project resolver → Planka card → Hermes Kanban task
+```
+
+This keeps the human workflow lightweight while preserving the board as the source of truth.
+
+## Obsidian handoff
+
+When a card produces a durable decision, final delivery summary, roadmap change, or important lesson, create or update a high-level project note. Do not mirror every operational heartbeat.
