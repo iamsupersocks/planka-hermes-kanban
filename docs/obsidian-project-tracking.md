@@ -100,11 +100,13 @@ Planka comments/status changes
 → stay silent when nothing changed
 ```
 
-Implementation convention used in the Supersocks stack:
+In a public implementation, this can be any small sync script owned by the operator, for example:
 
 ```text
-planka_elysia_project_sync.py
+planka_obsidian_project_sync.py
 ```
+
+If your Obsidian vault has a branded/internal name, keep that name private to your deployment. The public pattern only assumes a normal folder of Markdown notes.
 
 The script should write only compact project memory:
 
