@@ -106,8 +106,6 @@ In a public implementation, this can be any small sync script owned by the opera
 planka_obsidian_project_sync.py
 ```
 
-If your Obsidian vault has a branded/internal name, keep that name private to your deployment. The public pattern only assumes a normal folder of Markdown notes.
-
 The script should write only compact project memory:
 
 - live counts by project/list;
