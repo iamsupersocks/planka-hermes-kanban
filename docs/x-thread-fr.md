@@ -99,7 +99,7 @@ Les cartes deviennent des contrats exécutables.
 
 13/ Repo public avec l’analyse et le draft long :
 
-[à remplacer par l’URL GitHub]
+https://github.com/iamsupersocks/planka-hermes-kanban
 
 ## Option B — post court
 
@@ -119,4 +119,4 @@ Le futur de la todo list n’est probablement pas “Ask AI dans Trello”.
 
 C’est un gestionnaire de travail hybride où humains et agents partagent le même état opérationnel.
 
-Repo + article : [à remplacer]
+Repo + article : https://github.com/iamsupersocks/planka-hermes-kanban
