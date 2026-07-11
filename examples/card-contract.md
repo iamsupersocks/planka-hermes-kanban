@@ -1,66 +1,53 @@
-# Example: agent-readable card contract
+# Example card contract
+
+Use this as the body of a Planka card that should be executable by an agent.
 
 ```markdown
 ## Objective
-
-Fix mobile readability issues on the `/dashboard` page.
+Describe the outcome in one or two sentences.
 
 ## Context
+Explain why this matters and what the agent should know before starting.
 
-- Repo: `~/example-app`
-- Page: `/dashboard`
-- Priority: mobile first
-- Known issue: horizontal overflow on 390px width
-- Do not refactor unrelated layout components
+## Scope
+The agent may:
+- ...
+
+The agent must not:
+- ...
+
+## Relevant links / paths
+- Repository:
+- Files:
+- Service URL:
+- Existing docs:
 
 ## Acceptance criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
 
-- [ ] Reproduce issue on mobile viewport
-- [ ] Identify root cause
-- [ ] Apply minimal fix
-- [ ] Run build/test/lint where available
-- [ ] Capture before/after or describe manual verification
-- [ ] Post final summary with files changed and residual risks
+## Verification required
+The agent must provide:
+- command output or test result;
+- screenshots or URL checks if UI is involved;
+- diff summary if files changed;
+- risk/follow-up note if anything remains.
 
-## Constraints
-
-- Do not change backend APIs
-- Do not modify auth/session logic
-- Do not deploy without human approval
-
-## Permission level
-
-Autonomous:
-
-- inspect repo;
-- edit frontend files;
-- run local checks;
-- prepare commit/diff.
-
-Needs human approval:
-
+## Human approval required before
+- merge;
 - deploy;
-- merge PR;
-- change environment variables;
-- alter database schema.
+- deleting data;
+- changing credentials;
+- public posting;
+- other high-impact action.
 
-## Completion report format
-
-- Summary
-- Files changed
-- Commands run + exit codes
-- Verification evidence
-- Risks / follow-up
+## Latest human decision
+YYYY-MM-DD — Decision — reason.
 ```
 
-## Why this works
+## Why this format works
 
-The same card can be read by:
+The card gives the agent enough structure to execute without inventing scope.
 
-- a product owner;
-- an engineer;
-- Hermes Kanban;
-- GPT/Grok/Composer/Codex-style workers;
-- a reviewer who returns later.
-
-It avoids hidden context in chat and makes the task executable without making it opaque.
+It also gives the human a review checklist: if the acceptance criteria and verification evidence are missing, the card is not ready to be marked done.

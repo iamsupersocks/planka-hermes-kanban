@@ -1,100 +1,85 @@
-# Example: board lifecycle protocol
+# Example board lifecycle
 
-A kanban board for mixed human/AI work should model operational states, not just vibes.
-
-## Baseline lists
+Use the same lifecycle across boards unless you have a documented reason not to.
 
 ```text
-Backlog
-To Do — Human
-To Do — Agent
-Worker / In Progress
-Human Review
+Inbox
+Ready for Agent
+In Progress
 Blocked
+Review Required
 Done
+Archived
 ```
 
-## List semantics
+## Inbox
 
-### Backlog
+Raw intake.
 
-Ideas, requests, or incomplete tasks. Agents should not start from here unless explicitly asked to triage.
+Use for ideas, notes, vague requests, and tasks that are not ready for execution.
 
-### To Do — Human
+Agent rule: do not execute from this lane unless explicitly instructed.
 
-Tasks requiring human action, context, product judgment, or approval.
+## Ready for Agent
 
-### To Do — Agent
+Actionable work.
 
-Tasks ready for Hermes Kanban to pick up or delegate.
+A card can enter this lane when it has:
 
-A card in this list should have enough context and acceptance criteria to run safely.
+- objective;
+- context;
+- acceptance criteria;
+- permission boundary;
+- verification requirement.
 
-### Worker / In Progress
+Agent rule: this is the normal intake lane.
 
-A human or agent is actively working.
+## In Progress
 
-Expected behavior:
+A worker is actively executing.
 
-- card owner is visible;
-- heartbeat comments appear during long work;
-- no second worker starts without coordination.
+Agent rule: post concise progress when the state changes or evidence is produced.
 
-### Human Review
+## Blocked
 
-The agent prepared something but needs a human decision.
+Work cannot continue safely.
 
-Examples:
+A blocked card must say:
 
-- approve deployment;
-- choose among release candidates;
-- validate copy/design;
-- approve destructive operation;
-- merge PR.
+- what is blocked;
+- what was tried;
+- what input or decision is needed.
 
-### Blocked
+Agent rule: blocking is better than guessing.
 
-The task cannot progress.
+## Review Required
 
-A blocked card must include:
+Execution is complete enough to inspect.
 
-- what was attempted;
-- exact blocker;
-- who/what can unblock;
-- safe next step.
+A review card must include evidence:
 
-### Done
+- tests;
+- logs;
+- screenshots;
+- URLs;
+- diff summary;
+- known risks.
 
-Work is complete and verified.
+Human rule: review the evidence, then approve, reject, or request changes.
 
-Done cards should include evidence, not just a completion claim.
+## Done
 
-## Optional labels
+The work is accepted.
 
-```text
-Needs Approval
-Safe Autonomous
-Destructive
-Public Output
-Credential Needed
-Repo Dirty
-Needs Verification
-```
+Done means:
 
-## Operational rule
+- acceptance criteria satisfied;
+- evidence attached;
+- human approval obtained when required;
+- final status synced.
 
-If a card cannot be resumed by a different human or agent from the visible card state, the workflow is not sufficiently documented.
+## Archived
 
-## Chat-first intake
+Historical work that should not clutter active operations.
 
-Humans should be able to start from chat. The system should then resolve or create the Planka card behind the scenes.
-
-```text
-human chat message → project resolver → Planka card → Hermes Kanban task
-```
-
-This keeps the human workflow lightweight while preserving the board as the source of truth.
-
-## Obsidian handoff
-
-When a card produces a durable decision, final delivery summary, roadmap change, or important lesson, create or update a high-level project note. Do not mirror every operational heartbeat.
+Agent rule: do not resurrect archived cards without a human signal.
