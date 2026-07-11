@@ -1,4 +1,4 @@
-# Planka + Hermes Kanban : un gestionnaire de travail hybride humain/IA
+# Les agents IA ont besoin d’un état partagé, pas d’un énième chat
 
 La plupart des todo apps ont été pensées pour des humains.
 

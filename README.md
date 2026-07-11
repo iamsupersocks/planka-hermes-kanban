@@ -6,7 +6,7 @@ This repository documents a practical architecture where **Planka** is the human
 
 The core idea:
 
-> AI agents do not need another chat UI. They need shared operational state with humans.
+> AI agents need shared state, not another chat UI.
 
 ## Architecture
 

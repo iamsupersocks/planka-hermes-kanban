@@ -2,9 +2,7 @@
 
 ## Option A — thread complet
 
-1/ Les agents IA n’ont pas besoin d’un énième chat.
-
-Ils ont besoin d’un état de travail partagé avec les humains.
+1/ Les agents IA ont besoin d’un état partagé, pas d’un énième chat.
 
 C’est ce qu’on explore avec Planka + Hermes Kanban : un kanban open-source qui devient la source de vérité entre humains et agents.
 
