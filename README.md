@@ -75,6 +75,16 @@ Use workers for scoped execution: inspect, implement, test, audit, collect proof
 
 Workers do not own truth. They produce evidence.
 
+### Optional ChatGPT Pro review lane
+
+Use ChatGPT Pro as a bounded, read-only challenger when a plan, architecture, release candidate, or product decision benefits from a high-effort second review.
+
+Hermes prepares an immutable, secret-free evidence bundle, invokes a privately configured browser runner, verifies the exact model and Pro mode, and checks every useful finding against the real source before recording evidence in Planka.
+
+ChatGPT Pro does not own implementation, Git, Planka state, or task completion. It is not interchangeable with Codex `max` or `ultra`.
+
+See [`docs/chatgpt-pro-lane/`](docs/chatgpt-pro-lane/).
+
 ### Obsidian
 
 Use Obsidian for long-term memory:
@@ -216,6 +226,9 @@ docs/03-agent-operating-protocol.md
 
 docs/04-obsidian-memory-layer.md
   how to sync project memory without creating noise
+
+docs/chatgpt-pro-lane/
+  optional read-only ChatGPT Pro reviewer for Hermes, Codex, and Planka
 
 examples/card-contract.md
   copy/paste card template
