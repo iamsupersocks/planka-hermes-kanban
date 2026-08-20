@@ -199,6 +199,21 @@ See [`examples/card-contract.md`](examples/card-contract.md).
 
 See [`docs/04-obsidian-memory-layer.md`](docs/04-obsidian-memory-layer.md).
 
+## Exposing Planka/Hermes to MCP clients
+
+This repo ships a portable, stdio-only MCP server that exposes the existing
+`planka-build` CLI to any MCP client (Codex, Cursor, Hermes, or a generic
+stdio client) under one identical contract.
+
+- Read-only tools: `doctor`, `show` (annotated `readOnlyHint`).
+- Mutating tools: `open`, `worker`, `comment`, `finish` — **disabled by
+  default**, enabled per server process with `--allow-mutations`.
+- Zero runtime dependencies (Python 3.10+ stdlib); launched by absolute path,
+  nothing to install or package.
+
+See [`mcp/planka-hermes/README.md`](mcp/planka-hermes/README.md) for the tool
+list, server arguments, per-client configuration, and install path.
+
 ## Minimal repository map
 
 ```text
@@ -216,6 +231,12 @@ docs/03-agent-operating-protocol.md
 
 docs/04-obsidian-memory-layer.md
   how to sync project memory without creating noise
+
+mcp/planka-hermes/
+  portable stdio MCP server for the planka-build CLI (server.py + core + smoke + README)
+
+tests/test_planka_hermes_mcp.py
+  unit tests + end-to-end smoke for the MCP server
 
 examples/card-contract.md
   copy/paste card template
