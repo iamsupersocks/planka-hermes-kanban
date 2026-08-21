@@ -11,6 +11,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -505,15 +506,15 @@ class TestSmoke:
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _MCP_README = _REPO_ROOT / "mcp" / "planka-hermes" / "README.md"
 
-
-def _assembled_forbidden_needles() -> tuple[str, ...]:
-    """Live identifiers assembled at runtime so they never appear verbatim."""
-    return (
-        "".join(("18460107", "65941671745")),
-        "".join(("18460413", "28601794380")),
-        ".".join(("hermes-main", "home", "arpa")),
-        "." + ".".join(("ts", "net")),
-    )
+# Generic content guards — deliberately NOT encoded with any real ID / host.
+# Matching is by shape so no live identifier has to appear in the repository.
+_ANYWORD_NUM16_20 = re.compile(r"(?<![0-9])[0-9]{16,20}(?![0-9])")
+_HOME_USER = re.compile(r"/home/([A-Za-z0-9_][A-Za-z0-9._-]*)")
+# Placeholder usernames tolerated in docs and test fixtures.
+_PLACEHOLDER_USERS = {"you", "x"}
+# Internal DNS suffixes, assembled from codepoints so they don't leak verbatim.
+_HOME_ARPA = "".join(chr(c) for c in (104, 111, 109, 101, 46, 97, 114, 112, 97))
+_DOT_TS_NET = "." + "".join(chr(c) for c in (116, 115, 46, 110, 101, 116))
 
 
 def _tracked_file_texts() -> dict[str, str]:
@@ -540,13 +541,24 @@ def _tracked_file_texts() -> dict[str, str]:
 
 class TestPublicHeadContract:
     def test_tracked_files_have_no_live_identifiers(self):
-        needles = _assembled_forbidden_needles()
         hits = []
         for rel, text in _tracked_file_texts().items():
-            for needle in needles:
-                if needle in text:
-                    hits.append(f"{rel}: {needle}")
-        assert hits == [], "public HEAD still contains live identifiers: " + "; ".join(hits)
+            # Refuse any autonomous 16–20 digit number (Planka/Telegram id shape).
+            for tok in _ANYWORD_NUM16_20.findall(text):
+                hits.append(f"{rel}: 16–20 digit token {tok!r}")
+
+            # Refuse internal DNS suffixes that would leak a precise host.
+            if _HOME_ARPA in text:
+                hits.append(f"{rel}: {_HOME_ARPA} host suffix")
+            if _DOT_TS_NET in text:
+                hits.append(f"{rel}: {_DOT_TS_NET} host suffix")
+
+            # Refuse absolute user-home paths that are not documented placeholders,
+            # while tolerating /home/you, /home/x and temp fixture paths.
+            for user in _HOME_USER.findall(text):
+                if user not in _PLACEHOLDER_USERS:
+                    hits.append(f"{rel}: non-placeholder absolute path /home/{user}")
+        assert hits == [], "public HEAD still exposes live identifiers: " + "; ".join(hits)
 
     def test_readme_documents_env_inheritance_and_stdio_tails(self):
         text = _MCP_README.read_text(encoding="utf-8")
