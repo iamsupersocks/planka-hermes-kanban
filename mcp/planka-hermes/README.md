@@ -59,16 +59,32 @@ variables for behavior):
 | `--planka-build-cli PATH` | Path to the `planka-build` executable or `planka_build.py` script | `$PLANKA_BUILD_CLI`, then `planka-build` on PATH, then `~/.local/bin/planka-build` |
 
 `--allow-mutations` and `--timeout-seconds` are always passed as *arguments*;
-the only environment variable this server reads is `PLANKA_BUILD_CLI`, which
-is purely a path-resolution override for the CLI:
+the only environment variable this server *reads for its own configuration*
+is `PLANKA_BUILD_CLI`, a path-resolution override for the CLI:
 
 | Variable | Meaning | Default |
 |---|---|---|
 | `PLANKA_BUILD_CLI` | Path to the `planka-build` executable or `planka_build.py` script | `planka-build` on PATH, then `~/.local/bin/planka-build` |
 
-All other environment variables (`PLANKA_SSH_TARGET`, `HERMES_HOME`,
-`HERMES_KANBAN_BOARD`, …) are passed through unchanged to the CLI, which owns
-their semantics. No secrets are read, stored, or logged by this server.
+## Confidentiality contract
+
+This layer does not parse, persist, or redact secrets of its own. It also
+does **not** isolate the CLI from the MCP process:
+
+- `run_tool` copies `os.environ` (or a caller-supplied `env` dict) and
+  forwards that mapping to the child CLI. Variables the CLI owns
+  (`PLANKA_SSH_TARGET`, `HERMES_HOME`, `HERMES_KANBAN_BOARD`, …) therefore
+  inherit from the MCP process environment unless the caller passes a
+  tighter `env`.
+- A successful call returns the CLI stdout tail as `result` (parsed JSON)
+  or `result_text` (plain text, last 200_000 characters).
+- A failed call returns tails on the error payload: `details.stderr`
+  (last 4_000 characters) and, when present, `details.stdout_json` or
+  `details.stdout` (last 4_000 characters of non-JSON stdout).
+
+Anything present in the process environment or printed by the CLI can
+therefore reach the MCP client. Treat the client as seeing those tails.
+Do not put live card ids, hostnames, or credentials in examples.
 
 ## Structured errors
 
@@ -82,8 +98,8 @@ body:
 
 Codes: `invalid_input`, `unknown_tool`, `mutation_disabled`,
 `cli_not_found`, `cli_error` (nonzero exit; includes the CLI's JSON output
-in `details.stdout_json` when parseable — e.g. a failing `doctor` report),
-`timeout`.
+in `details.stdout_json` when parseable — e.g. a failing `doctor` report —
+otherwise `details.stdout`), `timeout`.
 
 ## Client configuration
 
@@ -150,7 +166,7 @@ The transport is newline-delimited JSON-RPC 2.0 on stdin/stdout:
 printf '%s\n%s\n%s\n' \
   '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18"}}' \
   '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
-  '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"planka_hermes_show","arguments":{"card_id":"1846010765941671745"}}}' \
+  '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"planka_hermes_show","arguments":{"card_id":"1234567890"}}}' \
   | python3 mcp/planka-hermes/server.py
 ```
 

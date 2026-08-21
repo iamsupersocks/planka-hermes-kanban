@@ -497,3 +497,70 @@ class TestSmoke:
         )
         assert proc.returncode == 0, proc.stdout + proc.stderr
         assert "SMOKE PASS" in proc.stdout
+
+
+# ─── Public HEAD contract (docs honesty + leak scan) ─────────────────────────
+
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+_MCP_README = _REPO_ROOT / "mcp" / "planka-hermes" / "README.md"
+
+
+def _assembled_forbidden_needles() -> tuple[str, ...]:
+    """Live identifiers assembled at runtime so they never appear verbatim."""
+    return (
+        "".join(("18460107", "65941671745")),
+        "".join(("18460413", "28601794380")),
+        ".".join(("hermes-main", "home", "arpa")),
+        "." + ".".join(("ts", "net")),
+    )
+
+
+def _tracked_file_texts() -> dict[str, str]:
+    proc = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=_REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    texts = {}
+    for rel in proc.stdout.split("\0"):
+        if not rel:
+            continue
+        path = _REPO_ROOT / rel
+        if not path.is_file():
+            continue
+        try:
+            texts[rel] = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            texts[rel] = path.read_bytes().decode("utf-8", errors="replace")
+    return texts
+
+
+class TestPublicHeadContract:
+    def test_tracked_files_have_no_live_identifiers(self):
+        needles = _assembled_forbidden_needles()
+        hits = []
+        for rel, text in _tracked_file_texts().items():
+            for needle in needles:
+                if needle in text:
+                    hits.append(f"{rel}: {needle}")
+        assert hits == [], "public HEAD still contains live identifiers: " + "; ".join(hits)
+
+    def test_readme_documents_env_inheritance_and_stdio_tails(self):
+        text = _MCP_README.read_text(encoding="utf-8")
+        required = (
+            "run_tool",
+            "os.environ",
+            "result_text",
+            "details.stderr",
+            "details.stdout_json",
+            "details.stdout",
+            "--allow-mutations",
+        )
+        missing = [token for token in required if token not in text]
+        assert missing == [], f"MCP README missing honesty tokens: {missing}"
+        assert "disabled by default" in text or "Off by default" in text or "off (read-only)" in text
+        # Example card_id must stay a placeholder, not a live Planka id.
+        assert '"card_id":"1234567890"' in text
